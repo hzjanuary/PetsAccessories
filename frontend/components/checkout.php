@@ -307,7 +307,7 @@ if (isset($db) && ($db instanceof PDO)) {
         <div style="background: #fff; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; width: 90%;">
             <h3 style="margin-bottom: 20px; color: #0f172a;">Quét mã QR để thanh toán</h3>
             <p style="color: #64748b; margin-bottom: 20px;">Đơn hàng của bạn sẽ được hoàn tất sau khi chuyển tiền.</p>
-            <img src="/PetsAccessories/backend/upload/qr/momo_qr.jpg" alt="QR Momo" style="width: 250px; height: auto; margin-bottom: 30px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px;">
+            <img id="qr-code-image" src="/PetsAccessories/backend/upload/qr/momo_qr.jpg" alt="QR Momo" style="width: 250px; height: auto; margin-bottom: 30px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px;">
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button type="button" id="btn-cancel-qr" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #64748b; cursor: pointer;">Hủy</button>
                 <button type="button" id="btn-paid-qr" style="padding: 10px 20px; border-radius: 8px; border: none; background: #38bdf8; color: #fff; font-weight: bold; cursor: pointer;">Đã chuyển tiền</button>
@@ -588,6 +588,7 @@ if (isset($db) && ($db instanceof PDO)) {
             const formSection = document.getElementById('checkout-form-section');
             const form = document.getElementById('checkoutForm');
             const qrModal = document.getElementById('qr-modal');
+            const qrCodeImage = document.getElementById('qr-code-image');
             const btnCancelQr = document.getElementById('btn-cancel-qr');
             const btnPaidQr = document.getElementById('btn-paid-qr');
 
@@ -622,6 +623,15 @@ if (isset($db) && ($db instanceof PDO)) {
 
                 if (paymentMethod && (paymentMethod.value === 'bank_transfer' || paymentMethod.value === 'ewallet') && !form.dataset.qrConfirmed) {
                     e.preventDefault();
+                    if (qrCodeImage) {
+                        if (paymentMethod.value === 'bank_transfer') {
+                            qrCodeImage.src = '/PetsAccessories/backend/upload/qr/vcb_qr.jpg';
+                            qrCodeImage.alt = 'QR Vietcombank';
+                        } else {
+                            qrCodeImage.src = '/PetsAccessories/backend/upload/qr/momo_qr.jpg';
+                            qrCodeImage.alt = 'QR Momo';
+                        }
+                    }
                     qrModal.style.display = 'flex';
                 }
             });
